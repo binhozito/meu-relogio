@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relógio Minimalista</title>
+    <style>
+        /* Estilização Visual */
+        body {
+            background-color: black;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        #hora {
+            font-size: 8rem;
+            font-weight: 300;
+            line-height: 1;
+        }
+
+        #data {
+            font-size: 1.5rem;
+            color: #a0a0a0;
+            margin-top: 10px;
+            text-transform: lowercase;
+        }
+
+        /* Responsividade para celulares */
+        @media (max-width: 600px) {
+            #hora { font-size: 4rem; }
+            #data { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="hora">00:00:00</div>
+    <div id="data">carregando...</div>
+
+    <script>
+        function atualizarRelogio() {
+            const agora = new Date();
+            
+            // Formata a hora (00:00:00)
+            const horas = String(agora.getHours()).padStart(2, '0');
+            const minutos = String(agora.getMinutes()).padStart(2, '0');
+            const segundos = String(agora.getSeconds()).padStart(2, '0');
+            document.getElementById('hora').textContent = `${horas}:${minutos}:${segundos}`;
+
+            // Formata a data (sexta-feira, 8 de maio de 2026)
+            const opcoes = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+            document.getElementById('data').textContent = agora.toLocaleDateString('pt-BR', opcoes);
+        }
+
+        // Atualiza a cada segundo
+        setInterval(atualizarRelogio, 1000);
+        atualizarRelogio(); // Executa imediatamente ao abrir
+    </script>
+</body>
+</html>
