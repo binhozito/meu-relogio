@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Relógio e Clima</title>
+    <title>Relógio Minimalista v2</title>
     <style>
         body {
             background-color: black;
@@ -14,70 +14,97 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            font-family: sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             overflow: hidden;
+            text-align: center;
         }
 
         #hora {
-            font-size: 5rem;
-            font-weight: 280;
+            font-size: 10rem; /* Tamanho maior para compensar a falta dos segundos */
+            font-weight: 800; /* Fonte bem grossa */
+            line-height: 0.9;
+            letter-spacing: -2px;
             font-variant-numeric: tabular-nums;
-            font-family: 'Courier New', Courier, monospace;
         }
 
-        #data {
-            font-size: 1.9rem;
-            color: #a0a0a0;
-            margin-top: 5px;
+        #data-container {
+            margin-top: 20px;
             text-transform: lowercase;
         }
 
+        #dia-semana {
+            font-size: 2rem;
+            font-weight: 600;
+            display: block; /* Garante que fique em uma linha própria */
+            color: white;
+        }
+
+        #data-completa {
+            font-size: 1.5rem;
+            color: #a0a0a0;
+            display: block; /* Garante que fique na linha de baixo */
+        }
+
         #clima {
-            margin-top: 40px;
+            margin-top: 25px;
             display: flex;
             align-items: center;
+            justify-content: center;
             font-size: 1.2rem;
-            color: #808080; /* Um cinza um pouco mais escuro para manter o foco na hora */
+            color: #808080;
         }
 
         #clima img {
-            width: 50px;
-            filter: grayscale(100%); /* Mantém o estilo minimalista preto e branco */
+            width: 45px;
+            filter: grayscale(100%);
         }
 
         @media (max-width: 600px) {
-            #hora { font-size: 4rem; }
-            #data { font-size: 1.3rem; }
+            #hora { font-size: 6rem; }
+            #dia-semana { font-size: 1.5rem; }
+            #data-completa { font-size: 1.1rem; }
         }
     </style>
 </head>
 <body>
 
-    <div id="hora">00:00:00</div>
-    <div id="data">carregando data...</div>
+    <div id="hora">00:00</div>
+    
+    <div id="data-container">
+        <span id="dia-semana">carregando...</span>
+        <span id="data-completa"></span>
+    </div>
+
     <div id="clima">carregando clima...</div>
 
     <script>
-        // CONFIGURAÇÕES
-        const apiKey = "41434e6879a35f43a2e4b5d73aa46840"; 
+        // CONFIGURAÇÕES (Mantenha as suas chaves aqui)
+        const apiKey = "SUA_CHAVE_AQUI"; 
         const cidade = "Sorocaba,BR"; 
 
         function atualizarRelogio() {
             const agora = new Date();
+            
+            // Formata apenas Hora e Minuto
             const horas = String(agora.getHours()).padStart(2, '0');
             const minutos = String(agora.getMinutes()).padStart(2, '0');
-            const segundos = String(agora.getSeconds()).padStart(2, '0');
-            document.getElementById('hora').textContent = `${horas}:${minutos}:${segundos}`;
+            document.getElementById('hora').textContent = `${horas}:${minutos}`;
 
-            const opcoes = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
-            document.getElementById('data').textContent = agora.toLocaleDateString('pt-BR', opcoes);
+            // Formata o dia da semana (ex: sexta-feira)
+            const diaSemana = agora.toLocaleDateString('pt-BR', { weekday: 'long' });
+            document.getElementById('dia-semana').textContent = diaSemana;
+
+            // Formata o restante da data (ex: 8 de maio de 2026)
+            const dataRestante = agora.toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' });
+            document.getElementById('data-completa').textContent = dataRestante;
         }
 
         async function obterClima() {
             try {
-                const url = `https://api.openweathermap.org/data/2.5/weather?q=${cidade}&units=metric&lang=pt_br&appid=${apiKey}`;
+                // Usando o ID direto de Sorocaba para evitar erros
+                const url = `https://api.openweathermap.org/data/2.5/weather?id=3447195&units=metric&lang=pt_br&appid=${apiKey}`;
                 const resposta = await fetch(url);
-                const dados = await JSON.parse(await resposta.text());
+                const dados = await resposta.json();
 
                 const temp = Math.round(dados.main.temp);
                 const desc = dados.weather[0].description;
@@ -92,11 +119,9 @@
             }
         }
 
-        // Atualiza relógio a cada segundo
         setInterval(atualizarRelogio, 1000);
         atualizarRelogio();
 
-        // Atualiza clima a cada 15 minutos (para não gastar o limite da API gratuita)
         obterClima();
         setInterval(obterClima, 900000);
     </script>
