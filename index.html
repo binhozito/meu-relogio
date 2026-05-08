@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Relógio e Clima - Sorocaba</title>
+    <title>Relógio Minimalista Bold</title>
     <style>
         body {
             background-color: black;
@@ -30,11 +30,11 @@
         #data-container {
             margin-top: 10px;
             text-transform: lowercase;
+            font-weight: 700; /* Aplica negrito na data toda */
         }
 
         #dia-semana {
             font-size: 2.5rem; 
-            font-weight: 600;
             display: block;
             margin-bottom: -5px; 
         }
@@ -52,6 +52,7 @@
             justify-content: center;
             font-size: 1.3rem;
             color: #808080;
+            font-weight: 700; /* Aplica negrito no clima */
         }
 
         #clima img {
@@ -79,9 +80,8 @@
     <div id="clima">carregando clima...</div>
 
     <script>
-        // CONFIGURAÇÕES ATUALIZADAS
         const apiKey = "41434e6879a35f43a2e4b5d73aa46840"; 
-        const cidade = "Sorocaba,BR";
+        const cidade = "Sorocaba,BR"; 
 
         function atualizarRelogio() {
             const agora = new Date();
@@ -98,7 +98,7 @@
 
         async function obterClima() {
             try {
-                const url = `https://api.openweathermap.org/data/2.5/weather?id=${cidadeId}&units=metric&lang=pt_br&appid=${apiKey}`;
+                const url = `https://api.openweathermap.org/data/2.5/weather?q=${cidade}&units=metric&lang=pt_br&appid=${apiKey}`;
                 const resposta = await fetch(url);
                 const dados = await resposta.json();
 
@@ -112,20 +112,17 @@
                         <span>${temp}°C • ${desc}</span>
                     `;
                 } else {
-                    document.getElementById('clima').textContent = "erro na chave de api";
+                    document.getElementById('clima').textContent = "ativando chave da api...";
                 }
             } catch (erro) {
                 document.getElementById('clima').textContent = "clima indisponível";
             }
         }
 
-        // Inicialização
         setInterval(atualizarRelogio, 1000);
         atualizarRelogio();
-        
-        // Chamada do clima
         obterClima();
-        setInterval(obterClima, 900000); // Atualiza a cada 15 minutos
+        setInterval(obterClima, 900000); 
     </script>
 </body>
 </html>
