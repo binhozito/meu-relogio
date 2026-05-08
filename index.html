@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Relógio Fixo</title>
+    <title>Relógio e Clima</title>
     <style>
         body {
             background-color: black;
@@ -19,47 +19,86 @@
         }
 
         #hora {
-            font-size: 5rem;
+            font-size: 8rem;
             font-weight: 300;
-            /* Força os números a terem a mesma largura */
             font-variant-numeric: tabular-nums;
-            font-family: 'Courier New', Courier, monospace; 
-            letter-spacing: 2px;
+            font-family: 'Courier New', Courier, monospace;
         }
 
         #data {
-            font-size: 3rem;
+            font-size: 1.5rem;
             color: #a0a0a0;
-            margin-top: 10px;
+            margin-top: 5px;
             text-transform: lowercase;
+        }
+
+        #clima {
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            font-size: 1.2rem;
+            color: #808080; /* Um cinza um pouco mais escuro para manter o foco na hora */
+        }
+
+        #clima img {
+            width: 50px;
+            filter: grayscale(100%); /* Mantém o estilo minimalista preto e branco */
         }
 
         @media (max-width: 600px) {
             #hora { font-size: 4rem; }
-            #data { font-size: 1.4rem; }
+            #data { font-size: 1rem; }
         }
     </style>
 </head>
 <body>
 
     <div id="hora">00:00:00</div>
-    <div id="data">carregando...</div>
+    <div id="data">carregando data...</div>
+    <div id="clima">carregando clima...</div>
 
     <script>
+        // CONFIGURAÇÕES
+        const apiKey = "55adb6dfafa9aa4bddf2880cc29f9555"; 
+        const cidade = "Sorocaba-SP"; 
+
         function atualizarRelogio() {
             const agora = new Date();
             const horas = String(agora.getHours()).padStart(2, '0');
             const minutos = String(agora.getMinutes()).padStart(2, '0');
             const segundos = String(agora.getSeconds()).padStart(2, '0');
-            
             document.getElementById('hora').textContent = `${horas}:${minutos}:${segundos}`;
 
             const opcoes = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
             document.getElementById('data').textContent = agora.toLocaleDateString('pt-BR', opcoes);
         }
 
+        async function obterClima() {
+            try {
+                const url = `https://api.openweathermap.org/data/2.5/weather?q=${cidade}&units=metric&lang=pt_br&appid=${apiKey}`;
+                const resposta = await fetch(url);
+                const dados = await JSON.parse(await resposta.text());
+
+                const temp = Math.round(dados.main.temp);
+                const desc = dados.weather[0].description;
+                const icone = dados.weather[0].icon;
+
+                document.getElementById('clima').innerHTML = `
+                    <img src="https://openweathermap.org/img/wn/${icone}.png">
+                    <span>${temp}°C • ${desc}</span>
+                `;
+            } catch (erro) {
+                document.getElementById('clima').textContent = "clima indisponível";
+            }
+        }
+
+        // Atualiza relógio a cada segundo
         setInterval(atualizarRelogio, 1000);
         atualizarRelogio();
+
+        // Atualiza clima a cada 15 minutos (para não gastar o limite da API gratuita)
+        obterClima();
+        setInterval(obterClima, 900000);
     </script>
 </body>
 </html>
