@@ -4,125 +4,430 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Relógio Minimalista Bold</title>
+
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            background-color: black;
+            background: #000;
             color: white;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
+            padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             overflow: hidden;
             text-align: center;
         }
 
+        #container {
+            width: 100%;
+            max-width: 320px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding-top: 6px;
+            padding-bottom: 6px;
+        }
+
         #hora {
-            font-size: 9rem; 
-            font-weight: 600; 
-            line-height: 1;
+            font-size: 9rem;
+            font-weight: 600;
+            line-height: 0.95;
             letter-spacing: -2px;
             font-variant-numeric: tabular-nums;
+            text-shadow: 0 0 15px rgba(255,255,255,0.08);
+        }
+
+        #fusos {
+            width: 100%;
+            margin-top: 14px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 36px;
+        }
+
+        .fuso {
+            width: 82px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .fuso-hora {
+            font-size: 1.95rem;
+            font-weight: 500;
+            color: #f1f1f1;
+            line-height: 1;
+            margin-bottom: 7px;
+            font-variant-numeric: tabular-nums;
+            text-shadow: 0 0 10px rgba(255,255,255,0.06);
+        }
+
+        .fuso-nome {
+            font-size: 0.88rem;
+            font-weight: 900;
+            letter-spacing: 1.1px;
+            color: #8a8a8a;
+            line-height: 1;
         }
 
         #data-container {
-            margin-top: 10px;
+            margin-top: 0;
             text-transform: lowercase;
-            font-weight: 700; /* Aplica negrito na data toda */
+            font-weight: 700;
         }
 
         #dia-semana {
-            font-size: 2.5rem; 
+            font-size: 2.5rem;
             display: block;
-            margin-bottom: -5px; 
+            margin-bottom: 14px;
+            line-height: 1;
+            text-shadow: 0 0 10px rgba(255,255,255,0.06);
         }
 
         #data-completa {
-            font-size: 1.8rem; 
-            color: #a0a0a0;
+            font-size: 1.8rem;
+            color: #a8a8a8;
             display: block;
+            line-height: 1;
+            margin-bottom: 10px;
         }
 
         #clima {
-            margin-top: 5px; 
+            min-height: 38px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.3rem;
-            color: #808080;
-            font-weight: 700; /* Aplica negrito no clima */
+            gap: 10px;
+            color: #a8a8a8;
+            font-weight: 700;
+            font-size: 1.45rem;
+            line-height: 1;
+            text-shadow: 0 0 10px rgba(255,255,255,0.04);
+            white-space: nowrap;
         }
 
-        #clima img {
-            width: 50px;
-            filter: grayscale(100%);
-            margin-right: -5px; 
+        #clima-emoji {
+            font-size: 1.65rem;
+            line-height: 1;
+            filter: drop-shadow(0 0 5px rgba(255,255,255,0.12));
+        }
+
+        #clima-temp {
+            color: #d7d7d7;
+        }
+
+        #clima-desc {
+            color: #8f8f8f;
+            text-transform: lowercase;
         }
 
         @media (max-width: 600px) {
-            #hora { font-size: 5rem; }
-            #dia-semana { font-size: 1.8rem; }
-            #data-completa { font-size: 1.3rem; }
+            #hora {
+                font-size: 5rem;
+            }
+
+            #fusos {
+                gap: 30px;
+                margin-bottom: 8px;
+            }
+
+            .fuso {
+                width: 76px;
+            }
+
+            .fuso-hora {
+                font-size: 1.55rem;
+            }
+
+            .fuso-nome {
+                font-size: 0.78rem;
+            }
+
+            #dia-semana {
+                font-size: 1.8rem;
+                margin-bottom: 12px;
+            }
+
+            #data-completa {
+                font-size: 1.3rem;
+            }
+
+            #clima {
+                font-size: 1.2rem;
+            }
+
+            #clima-emoji {
+                font-size: 1.4rem;
+            }
+        }
+
+        @media (max-height: 360px) {
+            #hora {
+                font-size: 5.2rem;
+                line-height: 0.95;
+            }
+
+            #fusos {
+                margin-top: 10px;
+                margin-bottom: 8px;
+                gap: 28px;
+            }
+
+            .fuso {
+                width: 72px;
+            }
+
+            .fuso-hora {
+                font-size: 1.45rem;
+                margin-bottom: 6px;
+            }
+
+            .fuso-nome {
+                font-size: 0.72rem;
+            }
+
+            #data-container {
+                margin-top: 0;
+            }
+
+            #dia-semana {
+                font-size: 2rem;
+                margin-bottom: 12px;
+            }
+
+            #data-completa {
+                font-size: 1.35rem;
+                margin-bottom: 9px;
+            }
+
+            #clima {
+                font-size: 1.15rem;
+                min-height: 32px;
+                gap: 8px;
+            }
+
+            #clima-emoji {
+                font-size: 1.35rem;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div id="hora">00:00</div>
-    
-    <div id="data-container">
-        <span id="dia-semana">carregando...</span>
-        <span id="data-completa"></span>
+    <div id="container">
+
+        <div id="hora">00:00</div>
+
+        <div id="fusos">
+
+            <div class="fuso">
+                <div class="fuso-hora" id="hora-mexico">00:00</div>
+                <div class="fuso-nome">MÉXICO</div>
+            </div>
+
+            <div class="fuso">
+                <div class="fuso-hora" id="hora-orlando">00:00</div>
+                <div class="fuso-nome">ORLANDO</div>
+            </div>
+
+        </div>
+
+        <div id="data-container">
+            <span id="dia-semana">carregando...</span>
+            <span id="data-completa"></span>
+        </div>
+
+        <div id="clima">carregando clima...</div>
+
     </div>
 
-    <div id="clima">carregando clima...</div>
-
     <script>
-        const apiKey = "41434e6879a35f43a2e4b5d73aa46840"; 
-        const cidade = "Sorocaba,BR"; 
+        const apiKey = "41434e6879a35f43a2e4b5d73aa46840";
+        const cidade = "Sorocaba,BR";
 
-        function atualizarRelogio() {
-            const agora = new Date();
-            const horas = String(agora.getHours()).padStart(2, '0');
-            const minutos = String(agora.getMinutes()).padStart(2, '0');
-            document.getElementById('hora').textContent = `${horas}:${minutos}`;
+        const horaEl = document.getElementById('hora');
+        const horaMexicoEl = document.getElementById('hora-mexico');
+        const horaOrlandoEl = document.getElementById('hora-orlando');
 
-            const diaSemana = agora.toLocaleDateString('pt-BR', { weekday: 'long' });
-            document.getElementById('dia-semana').textContent = diaSemana;
+        const diaSemanaEl = document.getElementById('dia-semana');
+        const dataCompletaEl = document.getElementById('data-completa');
+        const climaEl = document.getElementById('clima');
 
-            const dataRestante = agora.toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' });
-            document.getElementById('data-completa').textContent = dataRestante;
+        let diferencaServidor = 0;
+
+        function formatarHorarioFuso(timeZone) {
+            return new Intl.DateTimeFormat('pt-BR', {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false,
+                timeZone
+            }).format(new Date(Date.now() + diferencaServidor));
         }
 
-        async function obterClima() {
+        function atualizarRelogio() {
+            const agora = new Date(Date.now() + diferencaServidor);
+
+            const horas = String(agora.getHours()).padStart(2, '0');
+            const minutos = String(agora.getMinutes()).padStart(2, '0');
+
+            horaEl.textContent = `${horas}:${minutos}`;
+
+            horaMexicoEl.textContent = formatarHorarioFuso('America/Mexico_City');
+            horaOrlandoEl.textContent = formatarHorarioFuso('America/New_York');
+
+            diaSemanaEl.textContent = agora.toLocaleDateString('pt-BR', {
+                weekday: 'long'
+            });
+
+            dataCompletaEl.textContent = agora.toLocaleDateString('pt-BR', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+        }
+
+        async function sincronizarHorario() {
             try {
-                const url = `https://api.openweathermap.org/data/2.5/weather?q=${cidade}&units=metric&lang=pt_br&appid=${apiKey}`;
-                const resposta = await fetch(url);
-                const dados = await resposta.json();
+                const inicio = Date.now();
 
-                if(dados.cod === 200) {
-                    const temp = Math.round(dados.main.temp);
-                    const desc = dados.weather[0].description;
-                    const icone = dados.weather[0].icon;
+                const resposta = await fetch(
+                    'https://worldtimeapi.org/api/timezone/America/Sao_Paulo',
+                    {
+                        cache: 'no-store'
+                    }
+                );
 
-                    document.getElementById('clima').innerHTML = `
-                        <img src="https://openweathermap.org/img/wn/${icone}.png">
-                        <span>${temp}°C • ${desc}</span>
-                    `;
-                } else {
-                    document.getElementById('clima').textContent = "ativando chave da api...";
+                if (!resposta.ok) {
+                    throw new Error('Falha na sincronização');
                 }
+
+                const dados = await resposta.json();
+                const fim = Date.now();
+
+                if (dados.datetime) {
+                    const atrasoEstimado = Math.round((fim - inicio) / 2);
+
+                    const horarioServidor =
+                        new Date(dados.datetime).getTime() + atrasoEstimado;
+
+                    diferencaServidor = horarioServidor - Date.now();
+
+                    atualizarRelogio();
+                }
+
             } catch (erro) {
-                document.getElementById('clima').textContent = "clima indisponível";
+                console.log('Falha ao sincronizar horário online');
             }
         }
 
+        function obterEmojiClima(codigoIcone, descricao) {
+            const texto = descricao.toLowerCase();
+
+            if (codigoIcone.includes('01d')) return '☀️';
+            if (codigoIcone.includes('01n')) return '🌙';
+            if (codigoIcone.includes('02d')) return '🌤️';
+            if (codigoIcone.includes('02n')) return '🌙';
+            if (codigoIcone.includes('03') || codigoIcone.includes('04')) return '☁️';
+            if (codigoIcone.includes('09')) return '🌧️';
+            if (codigoIcone.includes('10d')) return '🌦️';
+            if (codigoIcone.includes('10n')) return '🌧️';
+            if (codigoIcone.includes('11')) return '⛈️';
+            if (codigoIcone.includes('13')) return '❄️';
+            if (codigoIcone.includes('50')) return '🌫️';
+
+            if (texto.includes('chuva')) return '🌧️';
+            if (texto.includes('tempestade')) return '⛈️';
+            if (texto.includes('nublado') || texto.includes('nuvens')) return '☁️';
+            if (texto.includes('névoa') || texto.includes('neblina')) return '🌫️';
+            if (texto.includes('limpo')) return '☀️';
+
+            return '🌡️';
+        }
+
+        async function obterClima() {
+            climaEl.textContent = 'carregando clima...';
+
+            try {
+                const url =
+                    `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(cidade)}&units=metric&lang=pt_br&appid=${apiKey}`;
+
+                const resposta = await fetch(url, {
+                    cache: 'no-store'
+                });
+
+                if (!resposta.ok) {
+                    throw new Error('Erro ao buscar clima');
+                }
+
+                const dados = await resposta.json();
+
+                if (
+                    Number(dados.cod) === 200 &&
+                    dados.main &&
+                    dados.weather &&
+                    dados.weather.length > 0
+                ) {
+                    const temp = Math.round(dados.main.temp);
+                    const desc = dados.weather[0].description;
+                    const icone = dados.weather[0].icon;
+                    const emoji = obterEmojiClima(icone, desc);
+
+                    climaEl.innerHTML = '';
+
+                    const emojiSpan = document.createElement('span');
+                    emojiSpan.id = 'clima-emoji';
+                    emojiSpan.textContent = emoji;
+                    emojiSpan.setAttribute('aria-label', desc);
+
+                    const temperatura = document.createElement('span');
+                    temperatura.id = 'clima-temp';
+                    temperatura.textContent = `${temp}°C`;
+
+                    const descricao = document.createElement('span');
+                    descricao.id = 'clima-desc';
+                    descricao.textContent = desc;
+
+                    climaEl.appendChild(emojiSpan);
+                    climaEl.appendChild(temperatura);
+                    climaEl.appendChild(descricao);
+
+                } else {
+                    climaEl.textContent = 'CLIMA INDISPONÍVEL';
+                }
+
+            } catch (erro) {
+                climaEl.textContent = 'CLIMA INDISPONÍVEL';
+            }
+        }
+
+        async function iniciarRelogio() {
+            atualizarRelogio();
+
+            await Promise.allSettled([
+                sincronizarHorario(),
+                obterClima()
+            ]);
+
+            atualizarRelogio();
+        }
+
+        iniciarRelogio();
+
         setInterval(atualizarRelogio, 1000);
-        atualizarRelogio();
-        obterClima();
-        setInterval(obterClima, 900000); 
+        setInterval(sincronizarHorario, 900000);
+        setInterval(obterClima, 900000);
     </script>
+
 </body>
 </html>
